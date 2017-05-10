@@ -1,0 +1,16 @@
+spring:
+  application:
+    name: servicea
+
+management:
+  security:
+    enabled: false
+
+server:
+  port: 8080
+
+zipkin:
+  enabled: ${ZIPKIN_ENABLED:false}
+  host: ${ZIPKIN_HOST:localhost}
+  port: ${ZIPKIN_PORT:32774}
+  serviceName: ${ZIPKIN_SERVICE_NAME:service-a}
