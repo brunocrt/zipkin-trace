@@ -10,6 +10,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import zipkintrace.common.tracing.TracingHelper;
+import zipkintrace.servicea.ServiceA;
 import zipkintrace.servicea.web.resources.AResource;
 
 @Slf4j
@@ -21,13 +22,16 @@ public class AController {
     @Autowired
     private Brave brave;
 
+    @Autowired
+    private ServiceA serviceA;
+
     @RequestMapping(path="", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseBody
     public HttpEntity<AResource> getA() {
         return TracingHelper.trace(() -> {
+            serviceA.process();
             val aResource = new AResource("test call A");
-            log.debug("Created AResource....................................................................................");
-            return new ResponseEntity<AResource>(aResource, HttpStatus.OK);
+            return new ResponseEntity<>(aResource, HttpStatus.OK);
         }, brave.serverSpanThreadBinder().getCurrentServerSpan().getSpan());
     }
 }

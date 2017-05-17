@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+option java_package = "zipkintrace.serviceb.grpc.serviceb.generated";
+
+package serviceb;
+
+service ServiceB {
+    rpc ShortRunning (Empty) returns (Result);
+    rpc LongRunning (Empty) returns (Result);
+}
+
+message Empty {
+}
+
+message Result {
+    int32 value = 1;
+}

@@ -1,21 +1,24 @@
 spring:
   application:
-    name: servicea
+    name: serviceb
 
 management:
   security:
     enabled: false
 
 server:
-  port: 8080
+  port: 8090
+
+grpc:
+  port : 6600
 
 serviceB:
   host: localhost
-  grpcPort: 6600
+  grpcPort:
   grpcDeadlineTimeoutInSeconds: 60
 
 zipkin:
   enabled: true
   host: localhost
   port: 32771
-  serviceName: service-a
+  serviceName: service-b
