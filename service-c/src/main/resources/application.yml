@@ -1,0 +1,16 @@
+spring:
+  application:
+    name: servicec
+
+management:
+  security:
+    enabled: false
+
+server:
+  port: 8100
+
+zipkin:
+  enabled: true
+  host: localhost
+  port: 32769
+  serviceName: service-c

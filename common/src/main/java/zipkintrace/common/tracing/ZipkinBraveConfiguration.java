@@ -1,8 +1,12 @@
 package zipkintrace.common.tracing;
 
-import com.github.kristofa.brave.Brave;
-import com.github.kristofa.brave.grpc.BraveGrpcClientInterceptor;
-import com.github.kristofa.brave.grpc.BraveGrpcServerInterceptor;
+import brave.Tracing;
+import brave.context.slf4j.MDCCurrentTraceContext;
+import brave.grpc.GrpcTracing;
+import brave.http.HttpTracing;
+import brave.propagation.CurrentTraceContext;
+import io.grpc.ClientInterceptor;
+import io.grpc.ServerInterceptor;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -12,6 +16,11 @@ import zipkin.reporter.AsyncReporter;
 import zipkin.reporter.Reporter;
 import zipkin.reporter.Sender;
 import zipkin.reporter.urlconnection.URLConnectionSender;
+
+import java.util.concurrent.Executor;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 @Configuration
 public class ZipkinBraveConfiguration {
@@ -44,24 +53,59 @@ public class ZipkinBraveConfiguration {
     }
 
     @Bean
-    @DependsOn("reporter")
-    public Brave brave() {
-        val braveBuilder = new Brave.Builder(serviceName);
+    public Tracing tracing() {
+        val tracing = Tracing.newBuilder()
+                .localServiceName(serviceName)
+                .currentTraceContext(MDCCurrentTraceContext.create());
+
         if (zipkinEnabled) {
-            braveBuilder.reporter(reporter());
+            tracing.reporter(reporter());
         }
-        return braveBuilder.build();
+        return tracing.build();
     }
 
     @Bean
-    @DependsOn("brave")
-    public BraveGrpcClientInterceptor braveGrpcClientInterceptor() {
-        return BraveGrpcClientInterceptor.create(brave());
+    @DependsOn("tracing")
+    public GrpcTracing grpcTracing() {
+        return GrpcTracing.create(tracing());
+    }
+
+    @Bean(name = "GrpcServerInterceptor")
+    public ServerInterceptor serviceInterceptor() {
+        return GrpcTracing.create(tracing()).newServerInterceptor();
+    }
+
+    @Bean(name = "GrpcClientInterceptor")
+    public ClientInterceptor clientInterceptor() {
+        return GrpcTracing.create(tracing()).newClientInterceptor();
     }
 
     @Bean
-    @DependsOn("brave")
-    public BraveGrpcServerInterceptor braveGrpcServerInterceptor() {
-        return BraveGrpcServerInterceptor.create(brave());
+    @DependsOn("tracing")
+    public HttpTracing httpTracing() {
+        return HttpTracing.newBuilder(tracing())
+                .clientParser(new ZipkinHttpClientParser())
+                .serverParser(new ZipkinHttpServerParser())
+                .build();
+    }
+
+    @Bean
+    public Executor executor() {
+        val queue = new LinkedBlockingQueue<Runnable>() {
+            @Override
+            public boolean offer(Runnable e) {
+                // queue that always rejects tasks
+                return false;
+            }
+        };
+
+        val threadPoolExecutor = new ThreadPoolExecutor(10, 20, 30, TimeUnit.SECONDS,
+                // Do not use the queue to prevent threads waiting on enqueued tasks.
+                queue,
+                // If all the threads are working, then the caller thread
+                // should execute the code in its own thread. (serially)
+                new ThreadPoolExecutor.CallerRunsPolicy());
+
+        return new CurrentTraceContext.Default().executor(threadPoolExecutor);
     }
 }

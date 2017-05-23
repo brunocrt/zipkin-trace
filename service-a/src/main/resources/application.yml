@@ -17,5 +17,5 @@ serviceB:
 zipkin:
   enabled: true
   host: localhost
-  port: 32771
+  port: 32769
   serviceName: service-a

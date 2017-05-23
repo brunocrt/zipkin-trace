@@ -1,4 +1,4 @@
-package zipkintrace.servicea.web;
+package zipkintrace.servicec.web;
 
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
@@ -8,24 +8,23 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import zipkintrace.servicea.ServiceA;
-import zipkintrace.servicea.web.resources.AResource;
+import zipkintrace.servicec.ServiceC;
+import zipkintrace.servicec.web.resources.CResource;
 
 @Slf4j
 @CrossOrigin
 @RestController
-@RequestMapping("/v1/a")
-public class AController {
+@RequestMapping("/v1/c")
+public class CController {
 
     @Autowired
-    private ServiceA serviceA;
+    private ServiceC serviceC;
 
     @RequestMapping(path = "", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseBody
-    public HttpEntity<AResource> getA() {
-        log.info("Getting A...............................................................");
-        serviceA.process();
-        val aResource = new AResource("test call A");
-        return new ResponseEntity<>(aResource, HttpStatus.OK);
+    public HttpEntity<CResource> getC() {
+        serviceC.process();
+        val cResource = new CResource("test call C");
+        return new ResponseEntity<>(cResource, HttpStatus.OK);
     }
 }

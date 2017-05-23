@@ -1,6 +1,6 @@
 package zipkintrace.servicea.grpc.serviceb;
 
-import com.github.kristofa.brave.grpc.BraveGrpcClientInterceptor;
+import brave.grpc.GrpcTracing;
 import io.grpc.CallOptions;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
@@ -19,7 +19,7 @@ import java.util.concurrent.TimeUnit;
 @Component
 public class GrpcServiceBClient {
     @Autowired
-    private BraveGrpcClientInterceptor braveGrpcClientInterceptor;
+    private GrpcTracing grpcTracing;
 
     @Value("${serviceB.host}")
     private String serviceBHost;
@@ -39,7 +39,7 @@ public class GrpcServiceBClient {
     public void postConstruct() {
         log.info("Service B at: {}:{}", serviceBHost, serviceBGrpcPort);
         channel = ManagedChannelBuilder.forAddress(serviceBHost, serviceBGrpcPort)
-                .intercept(braveGrpcClientInterceptor)
+                .intercept(grpcTracing.newClientInterceptor())
                 .usePlaintext(true).build();
     }
 
@@ -63,6 +63,6 @@ public class GrpcServiceBClient {
         return ServiceBGrpc.newBlockingStub(channel)
                 .withOption(CallOptions.Key.of("withWaitForReady", false), true)
                 .withDeadlineAfter(grpcDeadlineTimeoutInSeconds, TimeUnit.SECONDS)
-                .withInterceptors(braveGrpcClientInterceptor);
+                .withInterceptors(grpcTracing.newClientInterceptor());
     }
 }
