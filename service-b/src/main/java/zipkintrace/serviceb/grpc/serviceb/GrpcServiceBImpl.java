@@ -6,13 +6,15 @@ import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.lognet.springboot.grpc.GRpcService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import zipkintrace.common.tracing.GrpcServerInterceptorWrapper;
 import zipkintrace.serviceb.ServiceB;
 import zipkintrace.serviceb.grpc.serviceb.generated.ServiceBGrpc;
 import zipkintrace.serviceb.grpc.serviceb.generated.Serviceb;
 
 @Slf4j
-@GRpcService(interceptors = GrpcServerInterceptorWrapper.class)
+@Component
+//@GRpcService(interceptors = GrpcServerInterceptorWrapper.class)
 public class GrpcServiceBImpl extends ServiceBGrpc.ServiceBImplBase {
 
     @Autowired

@@ -15,6 +15,6 @@ public class ServiceA {
     public void process() {
         log.info("Running process in service A");
         serviceB.shortRunning();
-        serviceB.longRunning();
+        //serviceB.longRunning();
     }
 }

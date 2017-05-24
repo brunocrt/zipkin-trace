@@ -17,10 +17,7 @@ import zipkin.reporter.Reporter;
 import zipkin.reporter.Sender;
 import zipkin.reporter.urlconnection.URLConnectionSender;
 
-import java.util.concurrent.Executor;
-import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 
 @Configuration
 public class ZipkinBraveConfiguration {
@@ -91,6 +88,12 @@ public class ZipkinBraveConfiguration {
 
     @Bean
     public Executor executor() {
+        class myTestThreadFactory implements ThreadFactory {
+            public Thread newThread(Runnable r) {
+                return new Thread(r, "my-test-thread-pool");
+            }
+        }
+
         val queue = new LinkedBlockingQueue<Runnable>() {
             @Override
             public boolean offer(Runnable e) {
@@ -104,6 +107,7 @@ public class ZipkinBraveConfiguration {
                 queue,
                 // If all the threads are working, then the caller thread
                 // should execute the code in its own thread. (serially)
+                new myTestThreadFactory(),
                 new ThreadPoolExecutor.CallerRunsPolicy());
 
         return new CurrentTraceContext.Default().executor(threadPoolExecutor);

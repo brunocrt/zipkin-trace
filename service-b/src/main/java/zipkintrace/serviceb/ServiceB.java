@@ -17,6 +17,10 @@ public class ServiceB {
     @Autowired
     private ServiceC serviceC;
 
+    public ServiceB() {
+        log.info("Creating service B");
+    }
+
     @SneakyThrows
     public int shortRunning() {
         log.info("shortRunning was called: ");
