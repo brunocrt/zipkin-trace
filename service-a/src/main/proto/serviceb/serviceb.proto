@@ -7,6 +7,7 @@ package serviceb;
 service ServiceB {
     rpc ShortRunning (Empty) returns (Result);
     rpc LongRunning (Empty) returns (Result);
+    rpc ViaC (Empty) returns (Result);
 }
 
 message Empty {

@@ -40,7 +40,8 @@ public class GrpcServiceBClient {
         log.info("Service B at: {}:{}", serviceBHost, serviceBGrpcPort);
         channel = ManagedChannelBuilder.forAddress(serviceBHost, serviceBGrpcPort)
                 .intercept(grpcTracing.newClientInterceptor())
-                .usePlaintext(true).build();
+                .usePlaintext(true)
+                .build();
     }
 
     public void shutdown() throws InterruptedException {
@@ -59,10 +60,15 @@ public class GrpcServiceBClient {
         return result.getValue();
     }
 
+    public Integer viaC() {
+        val blockingStub = initializeBlockingStub();
+        val result = blockingStub.viaC(Serviceb.Empty.newBuilder().build());
+        return result.getValue();
+    }
+
     private ServiceBGrpc.ServiceBBlockingStub initializeBlockingStub() {
         return ServiceBGrpc.newBlockingStub(channel)
                 .withOption(CallOptions.Key.of("withWaitForReady", false), true)
-                .withDeadlineAfter(grpcDeadlineTimeoutInSeconds, TimeUnit.SECONDS)
-                .withInterceptors(grpcTracing.newClientInterceptor());
+                .withDeadlineAfter(grpcDeadlineTimeoutInSeconds, TimeUnit.SECONDS);
     }
 }

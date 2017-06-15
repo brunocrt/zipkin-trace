@@ -1,6 +1,5 @@
 package zipkintrace.serviceb;
 
-import brave.Tracing;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,9 +11,6 @@ import zipkintrace.serviceb.services.ServiceC;
 public class ServiceB {
 
     @Autowired
-    private Tracing tracing;
-
-    @Autowired
     private ServiceC serviceC;
 
     public ServiceB() {
@@ -23,16 +19,24 @@ public class ServiceB {
 
     @SneakyThrows
     public int shortRunning() {
-        log.info("shortRunning was called: ");
+        log.info("shortRunning was called");
+        serviceC.callViaHttp();
         Thread.sleep(100);
         return 100;
     }
 
     @SneakyThrows
     public int longRunning() {
-        log.info("longRunning was called: ");
-        serviceC.callC();
+        log.info("longRunning was called");
+        serviceC.callViaHttp();
         Thread.sleep(300);
         return 300;
+    }
+
+    @SneakyThrows
+    public int viaC() {
+        log.info("viaC was called");
+        serviceC.callViaGrpc();
+        return 500;
     }
 }

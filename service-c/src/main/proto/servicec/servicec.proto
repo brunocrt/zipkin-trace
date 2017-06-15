@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+option java_package = "zipkintrace.servicec.grpc.servicec.generated";
+
+package servicec;
+
+service ServiceC {
+    rpc callC (Empty) returns (Result);
+}
+
+message Empty {
+}
+
+message Result {
+    int32 value = 1;
+}

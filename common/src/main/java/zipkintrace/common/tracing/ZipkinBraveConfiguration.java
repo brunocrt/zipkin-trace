@@ -4,6 +4,7 @@ import brave.Tracing;
 import brave.context.slf4j.MDCCurrentTraceContext;
 import brave.grpc.GrpcTracing;
 import brave.http.HttpTracing;
+import brave.internal.StrictCurrentTraceContext;
 import brave.propagation.CurrentTraceContext;
 import io.grpc.ClientInterceptor;
 import io.grpc.ServerInterceptor;

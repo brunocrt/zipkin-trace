@@ -1,6 +1,5 @@
 package zipkintrace.serviceb.grpc.serviceb;
 
-import brave.Tracing;
 import io.grpc.stub.StreamObserver;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
@@ -14,11 +13,8 @@ import zipkintrace.serviceb.grpc.serviceb.generated.Serviceb;
 
 @Slf4j
 @Component
-//@GRpcService(interceptors = GrpcServerInterceptorWrapper.class)
+@GRpcService(interceptors = GrpcServerInterceptorWrapper.class)
 public class GrpcServiceBImpl extends ServiceBGrpc.ServiceBImplBase {
-
-    @Autowired
-    private Tracing tracing;
 
     @Autowired
     private ServiceB serviceB;
@@ -26,7 +22,7 @@ public class GrpcServiceBImpl extends ServiceBGrpc.ServiceBImplBase {
     @Override
     public void shortRunning(Serviceb.Empty request, StreamObserver<Serviceb.Result> responseObserver) {
 
-        log.info("TEST B called with shortRunning");
+        log.info("Service B called with shortRunning");
         val value = serviceB.shortRunning();
         responseObserver.onNext(Serviceb.Result.newBuilder().setValue(value).build());
         responseObserver.onCompleted();
@@ -34,8 +30,16 @@ public class GrpcServiceBImpl extends ServiceBGrpc.ServiceBImplBase {
 
     @Override
     public void longRunning(Serviceb.Empty request, StreamObserver<Serviceb.Result> responseObserver) {
-        log.info("TEST B called with longRunning");
+        log.info("Service B called with longRunning");
         val value = serviceB.longRunning();
+        responseObserver.onNext(Serviceb.Result.newBuilder().setValue(value).build());
+        responseObserver.onCompleted();
+    }
+
+    @Override
+    public void viaC(Serviceb.Empty request, StreamObserver<Serviceb.Result> responseObserver) {
+        log.info("Service B called with viaC");
+        val value = serviceB.viaC();
         responseObserver.onNext(Serviceb.Result.newBuilder().setValue(value).build());
         responseObserver.onCompleted();
     }

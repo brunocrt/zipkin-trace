@@ -14,7 +14,7 @@
 
     <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
-            <pattern>${CONSOLE_LOG_PATTERN}</pattern>
+            <pattern>%d [%X{traceId}/%X{spanId}] [%thread] %-5level %logger{36} - %msg%n</pattern>
             <charset>utf8</charset>
         </encoder>
     </appender>

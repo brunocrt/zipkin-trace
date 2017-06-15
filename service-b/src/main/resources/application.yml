@@ -12,9 +12,9 @@ server:
 grpc:
   port : 6600
 
-serviceB:
+serviceC:
   host: localhost
-  grpcPort:
+  grpcPort: 6610
   grpcDeadlineTimeoutInSeconds: 60
 
 zipkin:

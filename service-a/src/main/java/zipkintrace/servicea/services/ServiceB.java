@@ -24,4 +24,10 @@ public class ServiceB {
         val result = grpcServiceBClient.longRunning();
         log.info("Result of longRunning on Service B: {}", result);
     }
+
+    public void viaC() {
+        log.info("Calling viaC on Service B");
+        val result = grpcServiceBClient.viaC();
+        log.info("Result of viaC on Service B: {}", result);
+    }
 }

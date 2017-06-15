@@ -13,4 +13,10 @@ public class ServiceC {
         log.info("Processing in Service C");
         Thread.sleep(240);
     }
+
+    @SneakyThrows
+    public void callC() {
+        log.info("Service C: Call C");
+        Thread.sleep(130);
+    }
 }
