@@ -4,7 +4,6 @@ import brave.Tracing;
 import brave.context.slf4j.MDCCurrentTraceContext;
 import brave.grpc.GrpcTracing;
 import brave.http.HttpTracing;
-import brave.internal.StrictCurrentTraceContext;
 import brave.propagation.CurrentTraceContext;
 import io.grpc.ClientInterceptor;
 import io.grpc.ServerInterceptor;
@@ -89,12 +88,6 @@ public class ZipkinBraveConfiguration {
 
     @Bean
     public Executor executor() {
-        class myTestThreadFactory implements ThreadFactory {
-            public Thread newThread(Runnable r) {
-                return new Thread(r, "my-test-thread-pool");
-            }
-        }
-
         val queue = new LinkedBlockingQueue<Runnable>() {
             @Override
             public boolean offer(Runnable e) {
@@ -108,7 +101,6 @@ public class ZipkinBraveConfiguration {
                 queue,
                 // If all the threads are working, then the caller thread
                 // should execute the code in its own thread. (serially)
-                new myTestThreadFactory(),
                 new ThreadPoolExecutor.CallerRunsPolicy());
 
         return new CurrentTraceContext.Default().executor(threadPoolExecutor);
