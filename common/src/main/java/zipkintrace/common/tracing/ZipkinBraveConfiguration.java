@@ -88,6 +88,17 @@ public class ZipkinBraveConfiguration {
 
     @Bean
     public Executor executor() {
+        return new CurrentTraceContext.Default().executor(threadPoolExecutor());
+    }
+
+    @Bean
+    public ExecutorService executorService() {
+        return new CurrentTraceContext.Default().executorService(threadPoolExecutor());
+    }
+
+    @Bean
+    public ThreadPoolExecutor threadPoolExecutor(){
+
         val queue = new LinkedBlockingQueue<Runnable>() {
             @Override
             public boolean offer(Runnable e) {
@@ -96,13 +107,11 @@ public class ZipkinBraveConfiguration {
             }
         };
 
-        val threadPoolExecutor = new ThreadPoolExecutor(10, 20, 30, TimeUnit.SECONDS,
+        return new ThreadPoolExecutor(10, 20, 30, TimeUnit.SECONDS,
                 // Do not use the queue to prevent threads waiting on enqueued tasks.
                 queue,
                 // If all the threads are working, then the caller thread
                 // should execute the code in its own thread. (serially)
                 new ThreadPoolExecutor.CallerRunsPolicy());
-
-        return new CurrentTraceContext.Default().executor(threadPoolExecutor);
     }
 }
