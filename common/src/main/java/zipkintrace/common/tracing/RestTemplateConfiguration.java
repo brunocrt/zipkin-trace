@@ -1,4 +1,4 @@
-package zipkintrace.serviceb;
+package zipkintrace.common.tracing;
 
 import brave.http.HttpTracing;
 import brave.spring.web.TracingClientHttpRequestInterceptor;
