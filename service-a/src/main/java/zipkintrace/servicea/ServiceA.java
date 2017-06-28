@@ -17,18 +17,19 @@ public class ServiceA {
     private ServiceC serviceC;
 
     public void processA() {
-        log.info("Running process A in service A");
+        log.info("Calling 'shortRunning' on service B");
         serviceB.shortRunning();
+        log.info("Calling 'longRunning' on service B");
         serviceB.longRunning();
     }
 
     public void processB() {
-        log.info("Running process B in service A");
+        log.info("Calling 'viaC' on service B");
         serviceB.viaC();
     }
 
     public void processC() {
-        log.info("Running process C in service A");
+        log.info("Calling 'callC' on service C");
         serviceC.callC();
     }
 }

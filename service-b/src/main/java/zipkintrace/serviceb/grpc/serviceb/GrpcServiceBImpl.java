@@ -21,8 +21,7 @@ public class GrpcServiceBImpl extends ServiceBGrpc.ServiceBImplBase {
 
     @Override
     public void shortRunning(Serviceb.Empty request, StreamObserver<Serviceb.Result> responseObserver) {
-
-        log.info("Service B called with shortRunning");
+        log.info("Service B called with 'shortRunning' via gRPC");
         val value = serviceB.shortRunning();
         responseObserver.onNext(Serviceb.Result.newBuilder().setValue(value).build());
         responseObserver.onCompleted();
@@ -30,7 +29,7 @@ public class GrpcServiceBImpl extends ServiceBGrpc.ServiceBImplBase {
 
     @Override
     public void longRunning(Serviceb.Empty request, StreamObserver<Serviceb.Result> responseObserver) {
-        log.info("Service B called with longRunning");
+        log.info("Service B called with 'longRunning' via gRPC");
         val value = serviceB.longRunning();
         responseObserver.onNext(Serviceb.Result.newBuilder().setValue(value).build());
         responseObserver.onCompleted();
@@ -38,7 +37,7 @@ public class GrpcServiceBImpl extends ServiceBGrpc.ServiceBImplBase {
 
     @Override
     public void viaC(Serviceb.Empty request, StreamObserver<Serviceb.Result> responseObserver) {
-        log.info("Service B called with viaC");
+        log.info("Service B called with 'viaC' via gRPC");
         val value = serviceB.viaC();
         responseObserver.onNext(Serviceb.Result.newBuilder().setValue(value).build());
         responseObserver.onCompleted();

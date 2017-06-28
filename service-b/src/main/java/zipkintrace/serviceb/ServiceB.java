@@ -19,7 +19,7 @@ public class ServiceB {
 
     @SneakyThrows
     public int shortRunning() {
-        log.info("shortRunning was called");
+        log.info("Calling '/c' on service C via HTTP in 'shortRunning'");
         serviceC.callViaHttp();
         Thread.sleep(100);
         return 100;
@@ -27,7 +27,7 @@ public class ServiceB {
 
     @SneakyThrows
     public int longRunning() {
-        log.info("longRunning was called");
+        log.info("Calling '/c' on service C via HTTP in 'shortRunning'");
         serviceC.callViaHttp();
         Thread.sleep(300);
         return 300;
@@ -35,7 +35,7 @@ public class ServiceB {
 
     @SneakyThrows
     public int viaC() {
-        log.info("viaC was called");
+        log.info("Calling 'callC' on service C via gRPC' in 'viaC'");
         serviceC.callViaGrpc();
         return 500;
     }

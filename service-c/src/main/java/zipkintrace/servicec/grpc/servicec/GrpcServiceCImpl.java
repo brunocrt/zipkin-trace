@@ -21,7 +21,7 @@ public class GrpcServiceCImpl extends ServiceCGrpc.ServiceCImplBase {
 
     @Override
     public void callC(Servicec.Empty request, StreamObserver<Servicec.Result> responseObserver) {
-        log.info("Service C called with callC");
+        log.info("Service C called with 'callC' via gRPC");
         serviceC.callC();
         responseObserver.onNext(Servicec.Result.newBuilder().setValue(789).build());
         responseObserver.onCompleted();

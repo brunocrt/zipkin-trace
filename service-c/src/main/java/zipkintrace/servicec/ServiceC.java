@@ -10,13 +10,13 @@ public class ServiceC {
 
     @SneakyThrows
     public void process() {
-        log.info("Processing in Service C");
+        log.info("Running 'process' on service C");
         Thread.sleep(240);
     }
 
     @SneakyThrows
     public void callC() {
-        log.info("Service C: Call C");
+        log.info("Running 'callC' on service C");
         Thread.sleep(130);
     }
 }

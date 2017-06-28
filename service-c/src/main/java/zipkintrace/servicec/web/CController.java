@@ -23,6 +23,7 @@ public class CController {
     @RequestMapping(path = "", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseBody
     public HttpEntity<CResource> getC() {
+        log.info("Received /c request via HTTP");
         serviceC.process();
         val cResource = new CResource("test call C");
         return new ResponseEntity<>(cResource, HttpStatus.OK);

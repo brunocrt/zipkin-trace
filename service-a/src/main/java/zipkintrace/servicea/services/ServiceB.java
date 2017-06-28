@@ -14,20 +14,20 @@ public class ServiceB {
     private GrpcServiceBClient grpcServiceBClient;
 
     public void shortRunning() {
-        log.info("Calling shortRunning on Service B");
+        log.info("Calling 'shortRunning' on Service B via gRPC");
         val result = grpcServiceBClient.shortRunning();
-        log.info("Result of shortRunning on Service B: {}", result);
+        log.info("Result of 'shortRunning' on Service B: {}", result);
     }
 
     public void longRunning() {
-        log.info("Calling longRunning on Service B");
+        log.info("Calling 'longRunning' on Service B via gRPC");
         val result = grpcServiceBClient.longRunning();
-        log.info("Result of longRunning on Service B: {}", result);
+        log.info("Result of 'longRunning' on Service B: {}", result);
     }
 
     public void viaC() {
-        log.info("Calling viaC on Service B");
+        log.info("Calling 'viaC' on Service B via gRPC");
         val result = grpcServiceBClient.viaC();
-        log.info("Result of viaC on Service B: {}", result);
+        log.info("Result of 'viaC' on Service B: {}", result);
     }
 }

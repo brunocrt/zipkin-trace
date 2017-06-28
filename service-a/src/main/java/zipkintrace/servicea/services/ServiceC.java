@@ -14,7 +14,8 @@ public class ServiceC {
     private RestTemplate restTemplate;
 
     public void callC() {
+        log.info("Calling 'callC' on Service C via HTTP");
         val cResult = restTemplate.getForEntity("http://localhost:8100/v1/c", CResource.class);
-        log.info("Got response from service C: {}", cResult.getBody().getText());
+        log.info("Result of 'callC' on Service C: {}", cResult.getBody().getText());
     }
 }

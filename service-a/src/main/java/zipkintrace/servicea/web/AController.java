@@ -23,7 +23,7 @@ public class AController {
     @RequestMapping(path = "/a", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseBody
     public HttpEntity<AResource> getA() {
-        log.info("A:HTTP -> B:gRPC -> C:HTTP");
+        log.info("Received /a request: A:HTTP -> B:gRPC -> C:HTTP");
         serviceA.processA();
         val aResource = new AResource("test call A");
         return new ResponseEntity<>(aResource, HttpStatus.OK);
@@ -32,7 +32,7 @@ public class AController {
     @RequestMapping(path = "/b", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseBody
     public HttpEntity<AResource> getB() {
-        log.info("A:HTTP -> B:gRPC -> C:gRPC");
+        log.info("Received /b request: A:HTTP -> B:gRPC -> C:gRPC");
         serviceA.processB();
         val aResource = new AResource("test call B");
         return new ResponseEntity<>(aResource, HttpStatus.OK);
@@ -41,7 +41,7 @@ public class AController {
     @RequestMapping(path = "/c", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseBody
     public HttpEntity<AResource> getC() {
-        log.info("A:HTTP -> C:HTTP");
+        log.info("Received /c request: A:HTTP -> C:HTTP");
         serviceA.processC();
         val aResource = new AResource("test call C");
         return new ResponseEntity<>(aResource, HttpStatus.OK);
