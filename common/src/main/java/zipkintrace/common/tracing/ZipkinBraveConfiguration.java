@@ -45,7 +45,7 @@ public class ZipkinBraveConfiguration {
 
     @Bean
     @DependsOn("sender")
-    public Reporter reporter() {
+    public Reporter<zipkin.Span> reporter() {
         return AsyncReporter.builder(sender()).build();
     }
 
