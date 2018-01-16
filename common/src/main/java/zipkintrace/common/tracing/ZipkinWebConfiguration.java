@@ -1,7 +1,7 @@
 package zipkintrace.common.tracing;
 
 import brave.http.HttpTracing;
-import brave.spring.webmvc.TracingHandlerInterceptor;
+import brave.spring.webmvc.TracingAsyncHandlerInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,7 +13,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 public class ZipkinWebConfiguration extends WebMvcConfigurerAdapter {
     @Bean
     AsyncHandlerInterceptor tracingInterceptor(HttpTracing httpTracing) {
-        return TracingHandlerInterceptor.create(httpTracing);
+        return TracingAsyncHandlerInterceptor.create(httpTracing);
     }
 
     @Autowired

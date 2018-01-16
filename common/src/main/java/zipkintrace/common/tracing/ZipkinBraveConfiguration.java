@@ -12,10 +12,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
-import zipkin.reporter.AsyncReporter;
-import zipkin.reporter.Reporter;
-import zipkin.reporter.Sender;
-import zipkin.reporter.urlconnection.URLConnectionSender;
+import zipkin2.reporter.AsyncReporter;
+import zipkin2.reporter.Reporter;
+import zipkin2.reporter.Sender;
+import zipkin2.reporter.urlconnection.URLConnectionSender;
 
 import java.util.concurrent.*;
 
@@ -36,16 +36,14 @@ public class ZipkinBraveConfiguration {
 
     @Bean
     public Sender sender() {
-        val zipkinUrl = "http://" + zipkinHost + ":" + zipkinPort + "/api/v1/spans";
+        val zipkinUrl = "http://" + zipkinHost + ":" + zipkinPort + "/api/v2/spans";
 
-        return URLConnectionSender.builder()
-                .endpoint(zipkinUrl)
-                .build();
+        return URLConnectionSender.create(zipkinUrl);
     }
 
     @Bean
     @DependsOn("sender")
-    public Reporter<zipkin.Span> reporter() {
+    public Reporter<zipkin2.Span> reporter() {
         return AsyncReporter.builder(sender()).build();
     }
 
@@ -56,7 +54,7 @@ public class ZipkinBraveConfiguration {
                 .currentTraceContext(MDCCurrentTraceContext.create());
 
         if (zipkinEnabled) {
-            tracing.reporter(reporter());
+            tracing.spanReporter(reporter());
         }
         return tracing.build();
     }
@@ -88,12 +86,12 @@ public class ZipkinBraveConfiguration {
 
     @Bean
     public Executor executor() {
-        return new CurrentTraceContext.Default().executor(threadPoolExecutor());
+        return CurrentTraceContext.Default.create().executor(threadPoolExecutor());
     }
 
     @Bean
     public ExecutorService executorService() {
-        return new CurrentTraceContext.Default().executorService(threadPoolExecutor());
+        return CurrentTraceContext.Default.create().executorService(threadPoolExecutor());
     }
 
     @Bean
