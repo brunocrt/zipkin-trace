@@ -1,6 +1,7 @@
 package zipkintrace.servicea.grpc.serviceb;
 
 import brave.grpc.GrpcTracing;
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import io.grpc.CallOptions;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
@@ -18,6 +19,8 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 @Component
 public class GrpcServiceBClient {
+    public static final String SERVICE_B_COMMAND_KEY = "serviceB";
+
     @Autowired
     private GrpcTracing grpcTracing;
 
@@ -48,18 +51,21 @@ public class GrpcServiceBClient {
         channel.shutdown().awaitTermination(5, TimeUnit.SECONDS);
     }
 
+    @HystrixCommand(commandKey = SERVICE_B_COMMAND_KEY)
     public Integer shortRunning() {
         val blockingStub = initializeBlockingStub();
         val result = blockingStub.shortRunning(Serviceb.Empty.newBuilder().build());
         return result.getValue();
     }
 
+    @HystrixCommand(commandKey = SERVICE_B_COMMAND_KEY)
     public Integer longRunning() {
         val blockingStub = initializeBlockingStub();
         val result = blockingStub.longRunning(Serviceb.Empty.newBuilder().build());
         return result.getValue();
     }
 
+    @HystrixCommand(commandKey = SERVICE_B_COMMAND_KEY)
     public Integer viaC() {
         val blockingStub = initializeBlockingStub();
         val result = blockingStub.viaC(Serviceb.Empty.newBuilder().build());

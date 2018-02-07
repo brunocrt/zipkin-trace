@@ -15,5 +15,5 @@ grpc:
 zipkin:
   enabled: true
   host: localhost
-  port: 32769
+  port: 9411
   serviceName: service-c
