@@ -19,3 +19,5 @@ zipkin:
   host: localhost
   port: 9411
   serviceName: service-a
+
+hystrix.command.default.execution.isolation.strategy: SEMAPHORE
